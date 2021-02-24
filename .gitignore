@@ -2,6 +2,7 @@
 data/
 run/
 .vscode
+gpu_quota.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
