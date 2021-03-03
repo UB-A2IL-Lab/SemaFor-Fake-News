@@ -273,8 +273,8 @@ if __name__ == '__main__':
     parser.add_argument("-real_captions_dir", default='./data/real_caps/bert_data/', type=str)
     parser.add_argument("-ner_dir", default='./data/named_entities/', type=str)
     parser.add_argument("-model_dir", default='./run/models/')
-    parser.add_argument("-num_workers", default=8, type=int)
-    parser.add_argument("-test_with", default='fake', type=str)
+    parser.add_argument("-num_workers", default=4, type=int)
+    parser.add_argument("-test_with", default='fake-real', type=str)
     parser.add_argument("-is_train", default='False', type=str)
     
 
