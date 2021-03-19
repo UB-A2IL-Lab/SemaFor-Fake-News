@@ -23,7 +23,7 @@ class SCAN(nn.Module):
 
     def forward(self, img_feats, cap_feats, cap_mask):
         #sys.exit()
-    
+
         img_feats = torch.reshape(img_feats, (-1, img_feats.size(-2), img_feats.size(-1)))
         combined_scores = []
         for i in range(cap_feats.size(1)):
@@ -33,12 +33,12 @@ class SCAN(nn.Module):
             combined_scores.append(scores.unsqueeze(-1))
         combined_scores = torch.cat(combined_scores, dim=-1)
         combined_scores = self.softmax(combined_scores)
-        
+
         img_feats = img_feats.unsqueeze(2).repeat(1, 1, combined_scores.size(2), 1)
         combined_scores = combined_scores.unsqueeze(-1).repeat(1, 1, 1, img_feats.size(-1))
         img_cap_reps = combined_scores * img_feats
         img_cap_reps = torch.sum(img_cap_reps, dim=1)
-   
+
         return img_cap_reps
 
 class Model(nn.Module):
@@ -50,9 +50,9 @@ class Model(nn.Module):
         self.vis_fc = nn.Sequential(nn.Linear(self.args.img_feat_size, self.args.enc_hidden_size * 2), nn.ReLU())
         self.art_fc = nn.Sequential(nn.Linear(self.args.dec_hidden_size, self.args.enc_hidden_size * 2), nn.ReLU())
         self.cap_fc = nn.Sequential(nn.Linear(self.args.dec_hidden_size, self.args.enc_hidden_size * 2), nn.ReLU())
-        self.cls_fc = nn.Sequential(nn.Linear(self.args.enc_hidden_size*4+1, self.args.enc_hidden_size*2), nn.ReLU(), 
-                                    nn.BatchNorm1d(self.args.enc_hidden_size*2), 
-                                    nn.Linear(self.args.enc_hidden_size*2, self.args.enc_hidden_size), nn.ReLU(), 
+        self.cls_fc = nn.Sequential(nn.Linear(self.args.enc_hidden_size*4+1, self.args.enc_hidden_size*2), nn.ReLU(),
+                                    nn.BatchNorm1d(self.args.enc_hidden_size*2),
+                                    nn.Linear(self.args.enc_hidden_size*2, self.args.enc_hidden_size), nn.ReLU(),
                                     nn.Linear(self.args.enc_hidden_size, 2))
         self.scan = SCAN(args)
         self.sigmoid = nn.Sigmoid()
@@ -71,9 +71,9 @@ class Model(nn.Module):
         cap_num_toks = torch.sum(cap_mask_src, dim=-1)
         cap_word_embeds = self.cap_fc(cap_word_embeds)
         img_feats = self.vis_fc(img_feats.cuda())
-        
+
         img_cap_reps = self.scan(img_feats, cap_word_embeds, cap_mask_src)
-        img_cap_reps = torch.sum(img_cap_reps, dim=1)    
+        img_cap_reps = torch.sum(img_cap_reps, dim=1)
 
         cap_tok_counts = torch.sum(cap_mask_src, dim=-1)
         cap_tok_counts = cap_tok_counts.unsqueeze(-1).expand_as(img_cap_reps)
@@ -85,7 +85,7 @@ class Model(nn.Module):
             loss = 0.
             art_scores = []
             img_cap_reps = torch.reshape(img_cap_reps, (len(art_embeds), self.num_imgs, -1))
-            for i in range(len(art_embeds)):   
+            for i in range(len(art_embeds)):
 
                 tmp_art_text = art_ner[i]
                 curr_cap = []
@@ -99,7 +99,7 @@ class Model(nn.Module):
                 curr_cap = torch.cat(curr_cap, dim=0)
                 curr_cap = torch.reshape(curr_cap, (-1, self.num_imgs))
                 curr_cap = curr_cap.unsqueeze(-1)
-             
+
                 tmp_art = art_embeds[i].unsqueeze(0).unsqueeze(0).expand_as(img_cap_reps)
                 tmp_reps = torch.cat((tmp_art, img_cap_reps, curr_cap.cuda()), dim=-1)
 
@@ -124,7 +124,7 @@ class Model(nn.Module):
                 tmp_loss /= len(art_embeds)
                 loss += tmp_loss
                 art_scores.append(tmp_scores[i].unsqueeze(0))
-            
+
             art_scores = torch.cat(art_scores, dim=0)
             return loss, art_scores
 
@@ -155,5 +155,5 @@ class Model(nn.Module):
         art_scores = 1. - torch.reshape(art_scores, shape=(-1, self.num_imgs, art_scores.size(-1)))
         art_scores = torch.prod(art_scores, 1)
         art_scores = 1. - art_scores
-        
+
         return art_scores
