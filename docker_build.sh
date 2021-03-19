@@ -1,4 +1,4 @@
-sudo docker build -t ub/image-text:v1 ./
+sudo docker build -t ub/image-text:v1 .
 
 # # export docker image
 # sudo docker save -o docker_image.tar ub/image-text:v1.0
