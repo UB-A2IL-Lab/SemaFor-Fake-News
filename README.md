@@ -3,9 +3,13 @@ This repo is build upon DIDAN model.
 # Dependencies
 
 ```
-Python=3.6
-Pytorch=1.2.0
-spacy=2.0.12
+python>=3.6
+pytorch>=1.2.0
+torchvision>=0.4.0
+spacy=2.0.12 (-c conda-forge)
+sklearn=0.24.1
+sentencepiece=0.1.95
+ipdb=0.13.4
 transformers=4.2.2 (pip install pytorch-transformers)
 ```
 

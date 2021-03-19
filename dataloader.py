@@ -67,6 +67,7 @@ class Loader(Dataset):
                     name = '1_' + i
                     self.arts.append(name)
         # ipdb.set_trace()
+        self.arts.sort()
 
     def parse(self):
         # realarts2id = {k: '580d2f8595d0e022439c4c3f', v: 258XX}
