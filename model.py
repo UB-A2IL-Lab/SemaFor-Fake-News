@@ -7,10 +7,10 @@ import spacy
 from pytorch_transformers import BertModel, BertConfig
 from torch.nn.init import xavier_uniform_
 
-from models.decoder import TransformerDecoder
-from models.encoder import Classifier, ExtTransformerEncoder
-from models.optimizers import Optimizer
-from models.model_builder import AbsSummarizer
+from bert_models.decoder import TransformerDecoder
+from bert_models.encoder import Classifier, ExtTransformerEncoder
+from bert_models.optimizers import Optimizer
+from bert_models.model_builder import AbsSummarizer
 
 import ipdb
 
