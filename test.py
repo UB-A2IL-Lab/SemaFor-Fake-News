@@ -321,8 +321,7 @@ if __name__ == '__main__':
 
         result_dict = {0: 'True', 1: 'False'}
         result_format = "%20s\t %10s\t %10s\n"
-        result_file = pjoin(args.result_path, 'classification_results.txt')
-        check_dirs(args.result_path)
+        result_file = 'output/classification_results.txt'
         with open(result_file, 'w') as f:
             f.write(result_format % ('News ID', 'Real Score', 'Real?'))
             for idx, art in enumerate(all_arts):
