@@ -1,0 +1,15 @@
+# Customized ignore
+data/
+run/
+bottom-up-attention.pytorch/
+output/
+.vscode
+gpu_quota.py
+preprocess.py
+.git 
+.gitignore
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
