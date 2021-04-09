@@ -278,12 +278,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # # text feature extraction
-    # extract_text_feature(args, branch='caption')
-    # extract_text_feature(args, branch='article')
+    # text feature extraction
+    extract_text_feature(args, branch='caption')
+    extract_text_feature(args, branch='article')
 
-    # # image feature extraction
-    # extract_image_feature(args)
+    # image feature extraction
+    extract_image_feature(args)
 
     # get article list then save it
     token_path = pjoin(args.feature_path, 'article/token')

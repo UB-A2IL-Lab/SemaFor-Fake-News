@@ -3,10 +3,12 @@ This repo is build upon DIDAN model.
 # Dependencies
 
 ```
+gcc=7.5.0
 python>=3.6
-pytorch>=1.2.0
-torchvision>=0.4.0
-spacy=2.0.12 (-c conda-forge)
+pytorch>=1.4.0
+torchvision>=0.5.0
+spacy=2.0.12
+multiprocess=0.70.11.1
 scikit-learn=0.24.1
 sentencepiece=0.1.95
 ipdb=0.13.4
@@ -18,12 +20,18 @@ transformers=4.2.2 (pip install pytorch-transformers)
 Please follow the instructions here (https://cs-people.bu.edu/rxtan/projects/didan/) to download the NeuralNews dataset. In particular, download this file (https://drive.google.com/file/d/1rswGdNNfl4HoP9trslP0RUrcmSbg1_RD/view?usp=sharing) and place it into the data folder.
 
 # Preprocess Data (or Download)
+In this section, we describe how to extract features using other's code. In case some data are missing, you can download some meta data [here](https://owncloud.semaforprogram.com/index.php/s/hHLEjCjcczMbvgS). Password: semafor
 
 ### Image Features 
 For each image, we extract 36 region features using a Faster-RCNN model (https://github.com/peteanderson80/bottom-up-attention) that is pretrained on Visual Genome. The region features for each image is stored separately as a .npy file.
 
 ### Language Features
 To convert the articles and captions into the required input format, please go to https://github.com/nlpyang/PreSumm/blob/master/README.md and carry out steps 3 to 5 of data preparation.
+
+- Step 2. Download Stanford CoreNLP
+We will need Stanford CoreNLP to tokenize the data. Download it [here](https://stanfordnlp.github.io/CoreNLP/) and unzip it. Then add the following command to your bash_profile:
+`export CLASSPATH=/path/to/stanford-corenlp-full-2017-06-09/stanford-corenlp-3.8.0.jar`
+replacing `/path/to/` with the path to where you saved the stanford-corenlp-full-2017-06-09 directory.
 
 - Step 3: Remember to change '.story' to '.txt' in tokenize() in data_builder.py.
 ```
@@ -69,3 +77,11 @@ CUDA_VISIBLE_DEVICES=0 python train.py -num_workers 4 -test_with fake-real -is_t
 ```
 CUDA_VISIBLE_DEVICES=0 python train.py -num_workers 4 -test_with fake-real -is_train False
 ```
+
+# Demo
+To test new data, please put them into a folder following the format and structure of `data_demo`. Download the [pre-trained model](https://owncloud.semaforprogram.com/index.php/s/lCHAqPSi2ufb1zY) and the [image model](https://owncloud.semaforprogram.com/index.php/s/xwWfzQ5O8aPprOK). Then put them in './run/models/'. Password: semafor
+```
+CUDA_VISIBLE_DEVICES=0 python test.py
+```
+
+# Docker
