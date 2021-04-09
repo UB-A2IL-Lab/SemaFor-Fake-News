@@ -13,7 +13,7 @@ from sklearn.metrics import average_precision_score
 from torch.utils.data import Dataset, DataLoader
 from dataloader import Loader
 from model import Model
-from my_utils import AverageMeter, str2bool, convert_caps, collate, _pad
+from myutils import AverageMeter, str2bool, convert_caps, collate, _pad
 import ipdb
 
 
