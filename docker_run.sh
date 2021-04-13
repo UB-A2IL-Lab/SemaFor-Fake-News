@@ -8,4 +8,5 @@
 # of the docker (/app/data)
 sudo docker run -v /mnt/data/NeuralNews/data/:/app/data \
                 -it --rm --gpus all \
-                ub/image-text:v1.0
+                ub/image-text:v1.0 \
+                /bin/bash
