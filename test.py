@@ -195,13 +195,13 @@ if __name__ == '__main__':
     parser.add_argument('--image-dir', dest='image_dir', default="data_demo/image")
     parser.add_argument('--out-dir', dest='output_dir', default="run/feature/image")
     parser.add_argument("--config-file", default="bottom-up-attention.pytorch/configs/bua-caffe/extract-bua-caffe-r101-fix36.yaml", metavar="FILE", help="path to config file")
-    parser.add_argument("--image_model", default='run/models/bua-caffe-frcn-r101_with_attributes_fix36.pth', type=str)
+    parser.add_argument("--image_model", default='data/models/bua-caffe-frcn-r101_with_attributes_fix36.pth', type=str)
     parser.add_argument("--image_log", default='run/logs', type=str)
 
     # commom
     parser.add_argument("-data_path", default='data_demo/', type=str)
     parser.add_argument("-feature_path", default='run/feature', type=str)
-    parser.add_argument("-model_best", default='run/models/fake-real_model_best.pth', type=str)
+    parser.add_argument("-model_best", default='data/models/fake-real_model_best.pth', type=str)
     parser.add_argument("-num_workers", default=4, type=int)
     parser.add_argument("-test_with", default='fake-real', type=str)
     parser.add_argument("-is_train", default='False', type=str)
