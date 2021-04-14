@@ -1,4 +1,4 @@
-import os, sys, json, pickle, argparse, subprocess, ipdb 
+import os, sys, json, pickle, argparse, subprocess, ipdb
 import bisect, json, random, math, pickle
 from os.path import join as pjoin
 
@@ -16,7 +16,7 @@ from process_image import extract_image_feature
 
 def get_articles(token_path):
     file_list = os.listdir(token_path)
-    arts = [] 
+    arts = []
     for name in file_list:
         art = name.split('.')[0]
         arts.append(art)
@@ -49,7 +49,7 @@ class DemoLoader(Dataset):
         self.ner_dir = pjoin(args.feature_path, 'named_entities')
         self.articles = torch.load(pjoin(self.arts_dir, split + '.bert.pt'))
         self.captions = torch.load(pjoin(self.caps_dir, split + '.bert.pt'))
-        
+
         # realarts2id = {k: '580d2f8595d0e022439c4c3f', v: 258XX}
         self.arts2id = arts2id
         self.arts = []
@@ -57,10 +57,10 @@ class DemoLoader(Dataset):
             name = i
             self.arts.append(name)
         self.caps2id, self.arts2caps= self.parse()
-    
+
     def parse(self):
         # caps2id = {k: '580d2f8595d0e022439c4c3f_0', v: 567xx}
-        # arts2caps = {k: '580d2f8595d0e022439c4c3f', v: ['580d2f8595d0e022439c4c3f_0', 
+        # arts2caps = {k: '580d2f8595d0e022439c4c3f', v: ['580d2f8595d0e022439c4c3f_0',
         #                                                   '580d2f8595d0e022439c4c3f_1']}
         caps2id = {}
         arts2caps = {}
@@ -71,9 +71,9 @@ class DemoLoader(Dataset):
                 arts2caps[art] = []
             arts2caps[art].append(name)
             caps2id[name] = i
-        
+
         return caps2id, arts2caps
-         
+
 
     def _pad(self, data, pad_id, width=-1):
         if (width == -1):
@@ -111,7 +111,7 @@ class DemoLoader(Dataset):
         art = self.preprocess(art)
         art_path = os.path.join(self.ner_dir, '0_' + art_id + '.pkl')
         art_ner = pickle.load(open(art_path, 'rb'))
-    
+
         # Get images and captions
         imgs = self.arts2caps[art_id]
         if len(imgs) > 3:
@@ -123,10 +123,10 @@ class DemoLoader(Dataset):
         for i in imgs:
             cap_path = os.path.join(self.ner_dir, i + '.pkl')
             cap_ner = pickle.load(open(cap_path, 'rb'))
-            cap_text.append(cap_ner)   
+            cap_text.append(cap_ner)
 
             feat_path = os.path.join(self.img_feats_dir, i + '.npz')
-            # np.savez_compressed(output_file, x=image_feat, bbox=image_bboxes, 
+            # np.savez_compressed(output_file, x=image_feat, bbox=image_bboxes,
             #   num_bbox=len(keep_boxes), image_h=np.size(im, 0), image_w=np.size(im, 1), info=info)
             feat = torch.from_numpy(np.load(feat_path)['x'])
             combined_feats.append(feat.unsqueeze(0))
@@ -136,7 +136,7 @@ class DemoLoader(Dataset):
             tmp = self.preprocess(cap)
             combined_caps.append(tmp)
             # ipdb.set_trace()
-            
+
 
         num_imgs = len(imgs)
         if num_imgs < 3:
@@ -148,7 +148,7 @@ class DemoLoader(Dataset):
         for i in range(num_imgs):
             img_exists[i] = True
         combined_feats = torch.cat(combined_feats, dim=0)
-        
+
         combine = list(art)
         combine.append(combined_feats)
         combine.append(img_exists)
@@ -211,9 +211,6 @@ if __name__ == '__main__':
     parser.add_argument("-bert_data_path", default='./run/bert_data_new/cnndm')
     parser.add_argument("-result_path", default='./run/results')
     parser.add_argument("-temp_dir", default='./run/temp')
-
-    parser.add_argument("-batch_size", default=2, type=int)
-    parser.add_argument("-test_batch_size", default=200, type=int)
 
     parser.add_argument("-max_pos", default=512, type=int)
     parser.add_argument("-use_interval", type=str2bool, nargs='?',const=True,default=True)
@@ -297,19 +294,19 @@ if __name__ == '__main__':
     model = Model(args, device, None, bert_from_extractive)
     model = nn.DataParallel(model)
     model.cuda()
-    
+
     # cuda
     args.cuda = torch.cuda.is_available()
     kwargs = {'num_workers': args.num_workers, 'pin_memory': True} if args.cuda else {}
     if args.cuda:
         torch.cuda.manual_seed(args.seed)
-    
+
     # data
     arts2id = {}
     # ipdb.set_trace()
     for i, art in enumerate(all_arts):
         arts2id[art] = i
-    demo_loader = DataLoader(DemoLoader(args, 'test', arts2id), batch_size=2, 
+    demo_loader = DataLoader(DemoLoader(args, 'test', arts2id), batch_size=2,
                                 shuffle=False, collate_fn=collate, **kwargs)
 
     if not os.path.exists(args.model_best):
@@ -328,7 +325,7 @@ if __name__ == '__main__':
                 s = str(round(scores[idx][1].item(), 3))
                 c= result_dict[classes[idx].item()]
                 f.write(result_format % (art, s, c))
-        
+
         print('Classification finished! Please see the results in: ', result_file)
 
 
