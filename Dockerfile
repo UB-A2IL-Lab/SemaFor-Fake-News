@@ -23,7 +23,9 @@ RUN git clone --recursive https://github.com/MILVLG/bottom-up-attention.pytorch 
     && cd bottom-up-attention.pytorch/detectron2 \
     && pip install -e . \
     && cd .. \
-    && $ git clone https://github.com/NVIDIA/apex.git \
+    && git clone https://github.com/NVIDIA/apex.git \
+    && https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/libcublas-dev_10.1.0.105-1_amd64.deb \
+    && dpkg -i libcublas-dev_10.1.0.105-1_amd64.deb \
     && cd apex \
     && python setup.py install --cuda_ext --cpp_ext \
     && cd .. \
