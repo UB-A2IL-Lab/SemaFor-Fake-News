@@ -3,16 +3,21 @@ This repo is build upon DIDAN model.
 # Dependencies
 
 ```
-gcc=7.5.0
-python>=3.6
-pytorch>=1.4.0
-torchvision>=0.5.0
-spacy=2.0.12
-multiprocess=0.70.11.1
-scikit-learn=0.24.1
-sentencepiece=0.1.95
-ipdb=0.13.4
-transformers=4.2.2 (pip install pytorch-transformers)
+gcc==7.5.0
+openidk==1.8.0_282
+cuda==10.1
+Stanford CoreNLP==4.2.0
+python==3.8
+pytorch==1.4.0
+torchvision==0.5.0
+spacy==2.0.12
+multiprocess==0.70.11.1
+scikit-learn==0.24.1
+sentencepiece==0.1.95
+ipdb==0.13.4
+pytorch-transformers==1.2.0
+ray==1.2.0
+opencv-python==4.5.1.48
 ```
 
 # Original NeuralNews Dataset
@@ -79,9 +84,17 @@ CUDA_VISIBLE_DEVICES=0 python train.py -num_workers 4 -test_with fake-real -is_t
 ```
 
 # Demo
-To test new data, please put them into a folder following the format and structure of `data_demo`. Download the [pre-trained model](https://owncloud.semaforprogram.com/index.php/s/lCHAqPSi2ufb1zY) and the [image model](https://owncloud.semaforprogram.com/index.php/s/xwWfzQ5O8aPprOK). Then put them in './run/models/'. Password: semafor
+To test new data, please put them into a folder following the format and structure of `./data_demo`. Download the [pre-trained model](https://owncloud.semaforprogram.com/index.php/s/lCHAqPSi2ufb1zY) and the [image model](https://owncloud.semaforprogram.com/index.php/s/xwWfzQ5O8aPprOK). Then put them in './run/models/'. Password: semafor
 ```
 CUDA_VISIBLE_DEVICES=0 python test.py
 ```
 
 # Docker
+1. Build a docker image: `sh docker_build.sh`
+2. Run the docker: `sh docker_run.sh`
+3. Inside the docker: 
+```
+export CLASSPATH=$CLASSPATH:./stanford-corenlp-4.2.0/stanford-corenlp-4.2.0.jar
+CUDA_VISIBLE_DEVICES=0 python test.py
+```
+
