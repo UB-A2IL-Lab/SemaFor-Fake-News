@@ -43,7 +43,7 @@ def test(loader, model):
     acc = num_correct.item() / num_samples
     # ipdb.set_trace()
     # debug
-    # torch.save(scores, './run/results/test_acc_{}.pt'.format(acc))
+    # torch.save(scores, './output/results/test_acc_{}.pt'.format(acc))
     return acc
 
 def train(loader, model, opt, log_interval, epoch):
@@ -79,9 +79,9 @@ if __name__ == '__main__':
     parser.add_argument("-task", default='ext', type=str, choices=['ext', 'abs'])
     parser.add_argument("-encoder", default='bert', type=str, choices=['bert', 'baseline'])
     parser.add_argument("-mode", default='train', type=str, choices=['train', 'validate', 'test'])
-    parser.add_argument("-bert_data_path", default='./run/bert_data_new/cnndm')
-    parser.add_argument("-result_path", default='./run/results/cnndm')
-    parser.add_argument("-temp_dir", default='./run/temp')
+    parser.add_argument("-bert_data_path", default='./output/bert_data_new/cnndm')
+    parser.add_argument("-result_path", default='./output/results/cnndm')
+    parser.add_argument("-temp_dir", default='./output/temp')
 
     parser.add_argument("-batch_size", default=2, type=int)
     parser.add_argument("-test_batch_size", default=200, type=int)
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-visible_gpus', default='-1', type=str)
     parser.add_argument('-gpu_ranks', default='0', type=str)
-    parser.add_argument('-log_file', default='./run/logs/cnndm.log')
+    parser.add_argument('-log_file', default='./output/logs/cnndm.log')
     parser.add_argument('-seed', default=666, type=int)
 
     parser.add_argument("-test_all", type=str2bool, nargs='?',const=True,default=False)

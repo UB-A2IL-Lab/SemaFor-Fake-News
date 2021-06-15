@@ -179,7 +179,7 @@ if __name__ == '__main__':
     parser.add_argument('-max_tgt_ntokens', default=500, type=int)
     parser.add_argument("-lower", type=str2bool, nargs='?',const=True,default=True)
     parser.add_argument("-use_bert_basic_tokenizer", type=str2bool, nargs='?',const=True,default=False)
-    parser.add_argument('-log_file', default='./run/logs/preprocess.log')
+    parser.add_argument('-log_file', default='./output/logs/preprocess.log')
     parser.add_argument('-dataset', default='test')
     parser.add_argument('-n_cpus', default=2, type=int)
 
@@ -193,14 +193,14 @@ if __name__ == '__main__':
     parser.add_argument("opts", help="Modify config options", default=None,nargs=argparse.REMAINDER)
     parser.add_argument('--bbox-dir', dest='bbox_dir', help='directory with bbox', default="bbox")
     parser.add_argument('--image-dir', dest='image_dir', default="data_demo/image")
-    parser.add_argument('--out-dir', dest='output_dir', default="run/feature/image")
+    parser.add_argument('--out-dir', dest='output_dir', default="output/feature/image")
     parser.add_argument("--config-file", default="bottom-up-attention.pytorch/configs/bua-caffe/extract-bua-caffe-r101-fix36.yaml", metavar="FILE", help="path to config file")
     parser.add_argument("--image_model", default='data/models/bua-caffe-frcn-r101_with_attributes_fix36.pth', type=str)
-    parser.add_argument("--image_log", default='run/logs', type=str)
+    parser.add_argument("--image_log", default='output/logs', type=str)
 
     # commom
     parser.add_argument("-data_path", default='data_demo/', type=str)
-    parser.add_argument("-feature_path", default='run/feature', type=str)
+    parser.add_argument("-feature_path", default='output/feature', type=str)
     parser.add_argument("-model_best", default='data/models/fake-real_model_best.pth', type=str)
     parser.add_argument("-num_workers", default=4, type=int)
     parser.add_argument("-test_with", default='fake-real', type=str)
@@ -208,9 +208,9 @@ if __name__ == '__main__':
     parser.add_argument("-task", default='ext', type=str, choices=['ext', 'abs'])
     parser.add_argument("-encoder", default='bert', type=str, choices=['bert', 'baseline'])
     parser.add_argument("-mode", default='train', type=str, choices=['train', 'validate', 'test'])
-    parser.add_argument("-bert_data_path", default='./run/bert_data_new/cnndm')
-    parser.add_argument("-result_path", default='./run/results')
-    parser.add_argument("-temp_dir", default='./run/temp')
+    parser.add_argument("-bert_data_path", default='./output/bert_data_new/cnndm')
+    parser.add_argument("-result_path", default='./output/results')
+    parser.add_argument("-temp_dir", default='./output/temp')
 
     parser.add_argument("-max_pos", default=512, type=int)
     parser.add_argument("-use_interval", type=str2bool, nargs='?',const=True,default=True)
@@ -322,7 +322,7 @@ if __name__ == '__main__':
         with open(result_file, 'w') as f:
             f.write(result_format % ('News ID', 'Real Score', 'Real?'))
             for idx, art in enumerate(all_arts):
-                s = str(round(scores[idx][1].item(), 3))
+                s = str(round(scores[idx][0].item(), 3))
                 c= result_dict[classes[idx].item()]
                 f.write(result_format % (art, s, c))
 
