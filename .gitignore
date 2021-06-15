@@ -6,6 +6,7 @@ output/
 .vscode
 gpu_quota.py
 preprocess.py
+owncloud_up.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
