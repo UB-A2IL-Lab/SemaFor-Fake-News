@@ -8,4 +8,8 @@
 # of the docker (/app/data)
 sudo docker run -v /mnt/data/NeuralNews/data/:/app/data \
                 -it --rm --gpus all \
-                ub/image-text:v1.0
+                ub/image-text:v1.0 \
+                /bin/bash
+# After launching the docker, run the foloowing commands to test demo data.
+# export CLASSPATH=$CLASSPATH:./stanford-corenlp-4.2.0/stanford-corenlp-4.2.0.jar 
+# CUDA_VISIBLE_DEVICES=0 python test.py

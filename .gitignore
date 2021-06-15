@@ -1,8 +1,11 @@
 # Customized ignore
 data/
 run/
+bottom-up-attention.pytorch/
+output/
 .vscode
 gpu_quota.py
+preprocess.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

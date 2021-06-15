@@ -13,109 +13,9 @@ from sklearn.metrics import average_precision_score
 from torch.utils.data import Dataset, DataLoader
 from dataloader import Loader
 from model import Model
+from myutils import AverageMeter, str2bool, convert_caps, collate, _pad
 import ipdb
 
-class AverageMeter(object):
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.val = 0.
-        self.avg = 0.
-        self.sum = 0.
-        self.count = 0.
-
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-def str2bool(v):
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
-
-def convert_caps(data):
-    num_imgs = 3
-    pre_src = [x[0] for x in data]
-    pre_tgt = [x[1] for x in data]
-    pre_segs = [x[2] for x in data]
-    pre_clss = [x[3] for x in data]
-    pre_src_sent_labels = [x[4] for x in data]
-
-    src = torch.tensor(_pad(pre_src, 0))
-    tgt = torch.tensor(_pad(pre_tgt, 0))
-    segs = torch.tensor(_pad(pre_segs, 0))
-    mask_src = ~(src == 0)
-    mask_tgt = ~(tgt == 0)
-
-    clss = torch.tensor(_pad(pre_clss, -1))
-    src_sent_labels = torch.tensor(_pad(pre_src_sent_labels, 0))
-    mask_cls = ~(clss == -1)
-    clss[clss == -1] = 0
-
-    return src, tgt, segs, clss, mask_src, mask_tgt, mask_cls
-
-def collate(data):
-    """
-       data: is a list of tuples with (example, label, length)
-             where 'example' is a tensor of arbitrary shape
-             and label/length are scalars
-    """
-    pre_src = [x[0] for x in data]
-    pre_tgt = [x[1] for x in data]
-    pre_segs = [x[2] for x in data]
-    pre_clss = [x[3] for x in data]
-    pre_src_sent_labels = [x[4] for x in data]
-
-    src = torch.tensor(_pad(pre_src, 0))
-    tgt = torch.tensor(_pad(pre_tgt, 0))
-    segs = torch.tensor(_pad(pre_segs, 0))
-    mask_src = ~(src == 0)
-    mask_tgt = ~(tgt == 0)
-
-    clss = torch.tensor(_pad(pre_clss, -1))
-    src_sent_labels = torch.tensor(_pad(pre_src_sent_labels, 0))
-    mask_cls = ~(clss == -1)
-    clss[clss == -1] = 0
-
-    img_feats = [x[5].unsqueeze(0) for x in data]
-    img_feats = torch.cat(img_feats, dim=0)
-
-    img_exists = [x[6].unsqueeze(0) for x in data]
-    img_exists = torch.cat(img_exists, dim=0)
-
-    caps = [x[7] for x in data]
-    combined_caps = []
-    for i in caps:
-        combined_caps += i
-
-    labels = [x[8].unsqueeze(0) for x in data]
-    labels = torch.cat(labels, dim=0)
-
-    art_text = []
-    for x in data:
-      tmp = x[9]
-      art_text.append(tmp)
-
-    cap_text = []
-    for x in data:
-      tmp = x[10]
-      cap_text.append(tmp)
-
-    cap_src, cap_tgt, cap_segs, cap_clss, cap_mask_src, cap_mask_tgt, cap_mask_cls = convert_caps(combined_caps)
-
-    return src, tgt, segs, clss, mask_src, mask_tgt, mask_cls, img_feats, img_exists, cap_src, cap_tgt, cap_segs, cap_clss, cap_mask_src, cap_mask_tgt, cap_mask_cls, labels, art_text, cap_text
-
-def _pad(data, pad_id, width=-1):
-    if (width == -1):
-        width = max(len(d) for d in data)
-    rtn_data = [d + [pad_id] * (width - len(d)) for d in data]
-    return rtn_data
 
 def test(loader, model):
     model.eval()
@@ -272,7 +172,7 @@ if __name__ == '__main__':
     parser.add_argument("-fake_articles_dir", default='./data/fake_arts/bert_data/', type=str)
     parser.add_argument("-real_captions_dir", default='./data/real_caps/bert_data/', type=str)
     parser.add_argument("-ner_dir", default='./data/named_entities/', type=str)
-    parser.add_argument("-model_dir", default='./run/models/')
+    parser.add_argument("-model_dir", default='./data/models/')
     parser.add_argument("-num_workers", default=4, type=int)
     parser.add_argument("-test_with", default='fake-real', type=str)
     parser.add_argument("-is_train", default='False', type=str)
