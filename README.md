@@ -24,11 +24,11 @@ opencv-python==4.5.1.48
 
 Please follow the instructions here (https://cs-people.bu.edu/rxtan/projects/didan/) to download the NeuralNews dataset. In particular, download this file (https://drive.google.com/file/d/1rswGdNNfl4HoP9trslP0RUrcmSbg1_RD/view?usp=sharing) and place it into the data folder.
 
-# Preprocess Data (or Download)
-In this section, we describe how to extract features using other's code. In case some data are missing, you can download some meta data [here](https://owncloud.semaforprogram.com/index.php/s/hHLEjCjcczMbvgS). Password: semafor
+# Preprocess Data (or [Download](https://owncloud.semaforprogram.com/index.php/s/2fJYa4W6YNujNVi))
+In this section, we describe how to extract features using other's code. In case some data are missing, you can download some meta data [here](https://owncloud.semaforprogram.com/index.php/s/2fJYa4W6YNujNVi). Password: semafor
 
 ### Image Features 
-For each image, we extract 36 region features using a Faster-RCNN model (https://github.com/peteanderson80/bottom-up-attention) that is pretrained on Visual Genome. The region features for each image is stored separately as a .npy file.
+For each image, we extract 36 region features using a Faster-RCNN model (https://github.com/MILVLG/bottom-up-attention.pytorch) that is pretrained on Visual Genome. The region features for each image is stored separately as a .npy file.
 
 ### Language Features
 To convert the articles and captions into the required input format, please go to https://github.com/nlpyang/PreSumm/blob/master/README.md and carry out steps 3 to 5 of data preparation.
@@ -84,7 +84,7 @@ CUDA_VISIBLE_DEVICES=0 python train.py -num_workers 4 -test_with fake-real -is_t
 ```
 
 # Demo
-To test new data, please put them into a folder following the format and structure of `./data_demo`. Download the [pre-trained model](https://owncloud.semaforprogram.com/index.php/s/lCHAqPSi2ufb1zY) and the [image model](https://owncloud.semaforprogram.com/index.php/s/xwWfzQ5O8aPprOK). Then put them in './run/models/'. Password: semafor
+To test new data, please put them into a folder following the format and structure of `./data_demo`. Download the [pre-trained model](https://owncloud.semaforprogram.com/index.php/s/2fJYa4W6YNujNVi) and the [image model](https://owncloud.semaforprogram.com/index.php/s/2fJYa4W6YNujNVi). Then put them in './data/models/'.
 ```
 CUDA_VISIBLE_DEVICES=0 python test.py
 ```
